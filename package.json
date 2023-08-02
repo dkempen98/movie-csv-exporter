@@ -1,0 +1,19 @@
+{
+  "name": "film-grid",
+  "version": "1.0.0",
+  "description": "Grid game for matching people on production teams to movies they share",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dkempen98/film-grid.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dkempen98/film-grid/issues"
+  },
+  "homepage": "https://github.com/dkempen98/film-grid#readme"
+}
