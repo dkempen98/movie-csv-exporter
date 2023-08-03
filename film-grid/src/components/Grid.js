@@ -84,8 +84,8 @@ export default function Grid() {
         document.getElementById('search-bar-input').style.borderRadius = '30px';
         return
     }
-
-    theMovieDb.common.api_key = process.env.REACT_APP_API_KEY
+    theMovieDb.common.base_uri = "https://api.themoviedb.org/3/";
+    theMovieDb.common.api_key = process.env.REACT_APP_API_KEY;
 
     let searchString = searchQuery.replaceAll(' ', '%')
     console.log(searchString)
