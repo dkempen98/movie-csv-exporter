@@ -7,15 +7,16 @@ export default function Grid() {
     // TODO:: Make items dynamic
     const refOne = useRef(null)
 
-    const [xGrid, setXGrid] = useState(['Steven Spielberg', 'John Williams', 'Tom Cruise'])
-    const [yGrid, setYGrid] = useState(['Tom Hanks', 'Jamie Foxx', 'Kathleen Kennedy'])
+    const [xGrid, setXGrid] = useState(['Steven Spielberg', 'Robert Downey Jr.', 'Cate Blanchett'])
+    const [yGrid, setYGrid] = useState(['Benedict Cumberbatch', 'Tom Cruise', 'Matt Damon'])
     const [gridItems, setGridItems] = useState([])
-    const [xGridIds, setXGridIds] = useState([488, 491, 500])
-    const [yGridIds, setYGridIds] = useState([31, 134, 489])
+    const [xGridIds, setXGridIds] = useState([488, 3223, 112])
+    const [yGridIds, setYGridIds] = useState([71580, 500, 1892])
 
     const [xVal, setXVal] = useState(null)
     const [yVal, setYVal] = useState(null)
     const [remainingGuesses, setRemainingGuesses] = useState(9)
+    const [gameStillGoing, setGameStillGoing] = useState(true)
     const [guesses, setGuesses] = useState([])
     const [answers, setAnswers] = useState([])
     
@@ -26,6 +27,7 @@ export default function Grid() {
     
     let imageUrl = ''
     let movieName = ''
+    let activeGame = gameStillGoing
 
     function init() {
         defineGrid();
@@ -50,7 +52,7 @@ export default function Grid() {
                 )
             }
             gridPH.push(
-                <button key={'grid-square-'+i} id={'square-'+i} className={'grid-square square-'+i} onClick={() => initSearch(i)}><span id={'square-label-'+i}></span></button>
+                <button key={'grid-square-'+i} id={'square-'+i} className={'grid-square square-'+i} onClick={() => checkGameOver(i)}><span id={'square-label-'+i}></span></button>
             )
             if(i === 2 || i === 5 || i === 8) {
                 gridPH.push(
@@ -67,14 +69,19 @@ export default function Grid() {
 
     }
 
-    function initSearch(boxNum) {
-        if(remainingGuesses <= 8) {
-            return
+    function checkGameOver(boxNum) {
+        console.log(gameStillGoing)
+        if(activeGame) {
+            initSearch(boxNum)
         } else {
-            setXVal(boxNum % 3)
-            setYVal((boxNum - (boxNum % 3)) / 3)
-            setModal(oldVal => !oldVal);
+            console.log('Game Over')
         }
+    }
+
+    function initSearch(boxNum) {
+        setXVal(boxNum % 3)
+        setYVal((boxNum - (boxNum % 3)) / 3)
+        setModal(true);
     }
 
     function searchCall() {
@@ -156,6 +163,9 @@ export default function Grid() {
 
         theMovieDb.movies.getCredits({"id": movieInfo.id}, analyzeGuess, errorCB)
 
+        setRemainingGuesses(prevRemainingGuesses => prevRemainingGuesses - 1);
+
+
         // setModal(false)
     }
 
@@ -167,8 +177,6 @@ export default function Grid() {
         let boxEl = document.getElementById(boxId) 
         let boxLabel = 'square-label-' + ((yVal * 3) + xVal)
         let boxLabelEl = document.getElementById(boxLabel) 
-
-        setRemainingGuesses(guesses => guesses - 1)
 
         if (castAndCrew.cast.some(member => member.id === xGridIds[xVal])) {
             xMatch = true
@@ -209,14 +217,6 @@ export default function Grid() {
         setResultEl()
 
 
-    }
-
-    function gameOver() {
-        console.log('Happening')
-        console.log(remainingGuesses <= 0)
-        if(remainingGuesses <= 0) {
-            document.getElementsByClassName('grid-square').disabled = true;
-        }
     }
 
     function handleClickOutside(e) {
@@ -260,7 +260,10 @@ export default function Grid() {
     }, [resultList])
 
     useEffect(() => {
-        gameOver()
+        if(remainingGuesses <= 8) {
+            setGameStillGoing(false)
+            console.log('Game Over')
+        }
     }, [remainingGuesses])
 
     return (
