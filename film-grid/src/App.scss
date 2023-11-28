@@ -29,7 +29,7 @@ a {
 .App {
   background-color: var(--bg);
   min-height: 100vh;
-  min-width: 100vw;
+  width: 100vw;
   position: relative;
 
   background-image: url('./images/theatre-background.jpg');
@@ -112,11 +112,18 @@ a {
 .x-header {
   margin: auto;
   text-align: center;
+  line-height: 1.5em;
+  // font-size: 1.25em;
 }
 
 .x-header {
+  // padding: 8px;
   padding-top: 1em;
   padding-bottom: 1em;
+}
+
+.y-header {
+  // padding-right: 8px;
 }
 
 // search modal
@@ -220,6 +227,7 @@ a {
   display: flex;
   align-items: center;
   flex-direction: column;
+  text-align: center;
   margin-top: 1rem;
   gap: 1rem;
   font-size: 2em;
@@ -258,5 +266,15 @@ a {
 
   &:hover {
     cursor: pointer;
+  }
+}
+
+@media screen and (max-width: 600px){
+  .grid-container {
+    grid-template-columns: repeat(4, 1fr);
+    width: 75vw;
+  }
+  .empty-item {
+    display: none;
   }
 }
