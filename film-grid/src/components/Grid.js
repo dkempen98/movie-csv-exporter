@@ -7,15 +7,15 @@ export default function Grid() {
     // TODO:: Make items dynamic
     const refOne = useRef(null)
 
-    const [xGrid, setXGrid] = useState(['Steven Spielberg', 'Robert Downey Jr.', 'Cate Blanchett'])
-    const [yGrid, setYGrid] = useState(['Benedict Cumberbatch', 'Tom Cruise', 'Matt Damon'])
+    const [xGrid, setXGrid] = useState(['Steven Spielberg', 'Samuel L. Jackson', 'Drew Barrymore'])
+    const [yGrid, setYGrid] = useState(['Kathleen Kennedy', 'Tommy Lee Jones', 'Sam Rockwell'])
     const [gridItems, setGridItems] = useState([])
-    const [xGridIds, setXGridIds] = useState([488, 3223, 112])
-    const [yGridIds, setYGridIds] = useState([71580, 500, 1892])
+    const [xGridIds, setXGridIds] = useState([488, 2231, 69597])
+    const [yGridIds, setYGridIds] = useState([489, 2176, 6807])
 
     const [xVal, setXVal] = useState(null)
     const [yVal, setYVal] = useState(null)
-    const [remainingGuesses, setRemainingGuesses] = useState(9)
+    const [guessCount, setGuessCount] = useState(0)
     const [gameStillGoing, setGameStillGoing] = useState(true)
     const [guesses, setGuesses] = useState([])
     const [answers, setAnswers] = useState([])
@@ -27,7 +27,6 @@ export default function Grid() {
     
     let imageUrl = ''
     let movieName = ''
-    let activeGame = gameStillGoing
 
     function init() {
         defineGrid();
@@ -52,7 +51,7 @@ export default function Grid() {
                 )
             }
             gridPH.push(
-                <button key={'grid-square-'+i} id={'square-'+i} className={'grid-square square-'+i} onClick={() => checkGameOver(i)}><span id={'square-label-'+i}></span></button>
+                <button key={'grid-square-'+i} id={'square-'+i} className={'grid-square square-'+i} onClick={() => initSearch(i)}><span id={'square-label-'+i}></span></button>
             )
             if(i === 2 || i === 5 || i === 8) {
                 gridPH.push(
@@ -67,15 +66,6 @@ export default function Grid() {
 
         setGridItems(gridPH)
 
-    }
-
-    function checkGameOver(boxNum) {
-        console.log(gameStillGoing)
-        if(activeGame) {
-            initSearch(boxNum)
-        } else {
-            console.log('Game Over')
-        }
     }
 
     function initSearch(boxNum) {
@@ -163,7 +153,7 @@ export default function Grid() {
 
         theMovieDb.movies.getCredits({"id": movieInfo.id}, analyzeGuess, errorCB)
 
-        setRemainingGuesses(prevRemainingGuesses => prevRemainingGuesses - 1);
+        setGuessCount(prevRemainingGuesses => prevRemainingGuesses + 1);
 
 
         // setModal(false)
@@ -260,11 +250,11 @@ export default function Grid() {
     }, [resultList])
 
     useEffect(() => {
-        if(remainingGuesses <= 8) {
+        if(guessCount <= 8) {
             setGameStillGoing(false)
             console.log('Game Over')
         }
-    }, [remainingGuesses])
+    }, [guessCount])
 
     return (
         <div>
@@ -272,8 +262,8 @@ export default function Grid() {
                 {gridItems}
             </div>
             <div className='guess-counter'>
-                <div>Remaining Guesses:</div>
-                <div>{ remainingGuesses }</div>
+                <div>Number of Guesses:</div>
+                <div>{ guessCount }</div>
             </div>
             {modal && (
                 <div className='overlay'>
